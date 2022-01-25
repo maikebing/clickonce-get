@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  clickonceget.server:
+    image: ${DOCKER_REGISTRY-}clickoncegetserver
+    build:
+      context: .
+      dockerfile: Server/Dockerfile

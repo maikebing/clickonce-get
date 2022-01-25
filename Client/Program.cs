@@ -16,7 +16,7 @@ public class Program
 
         builder.Services.AddScoped(services =>
         {
-            var httpClient = new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) };
+            var httpClient = new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress), Timeout=TimeSpan.FromMinutes(10)};
             var jsRuntime = services.GetService<IJSRuntime>() as IJSInProcessRuntime;
             httpClient.DefaultRequestHeaders.Add(
                 "X-ANTIFORGERY-TOKEN",

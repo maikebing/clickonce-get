@@ -90,7 +90,7 @@ public class ApplicationsController : ControllerBase
     }
 
     // POST api/myapps/zipedpackage
-    [Authorize, HttpPost("api/myapps/zipedpackage")]
+    [Authorize, HttpPost("api/myapps/zipedpackage"), RequestSizeLimit(1024*1024*500)]
     public async Task<ActionResult> UploadAppAsync(IFormFile zipedPackage)
     {
         var userId = this.User.GetHashedUserId();
@@ -204,7 +204,7 @@ public class ApplicationsController : ControllerBase
         {
             var gitHubUserName = this.User.Identity.Name;
             appInfo.PublisherName = gitHubUserName;
-            appInfo.PublisherURL = "https://github.com/" + gitHubUserName;
+            appInfo.PublisherURL = "https://gitee.com/" + gitHubUserName;
             appInfo.PublisherAvatorImageURL = "https://avatars.githubusercontent.com/" + gitHubUserName;
         }
         else

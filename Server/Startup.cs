@@ -6,6 +6,7 @@ using ClickOnceGet.Shared.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace ClickOnceGet.Server;
 
@@ -39,12 +40,13 @@ public class Startup
         services.AddScoped<IClickOnceAppInfoProvider, ServerSideClickOnceAppInfoProvider>();
         services.AddScoped<ClickOnceAppContentManager>();
 
+        services.AddSameSiteCookiePolicy(); // cookie policy to deal with temporary browser incompatibilities
         services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddGitHub(options =>
+            .AddGitee(options =>
             {
-                options.ClientId = this.Configuration.GetValue<string>("Authentication:GitHub:ClientId");
-                options.ClientSecret = this.Configuration.GetValue<string>("Authentication:GitHub:ClientSecret");
+                options.ClientId = this.Configuration.GetValue<string>("Authentication:Gitee:ClientId");
+                options.ClientSecret = this.Configuration.GetValue<string>("Authentication:Gitee:ClientSecret");
             })
             .AddCookie(options =>
             {
@@ -52,8 +54,8 @@ public class Startup
                 {
                     var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
                     var providerKey = claimsIdentity.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-                    claimsIdentity.AddClaim(new Claim(CustomClaimTypes.IdentityProvider, "GitHub"));
-                    claimsIdentity.AddClaim(new Claim(CustomClaimTypes.HasedUserId, $"GitHub|{providerKey}|{this.Configuration["Authentication:Salt"]}".ToMD5()));
+                    claimsIdentity.AddClaim(new Claim(CustomClaimTypes.IdentityProvider, "Gitee"));
+                    claimsIdentity.AddClaim(new Claim(CustomClaimTypes.HasedUserId, $"Gitee|{providerKey}|{this.Configuration["Authentication:Salt"]}".ToMD5()));
                     return Task.CompletedTask;
                 };
             });
@@ -79,7 +81,7 @@ public class Startup
 
         app.UseBlazorFrameworkFiles();
         app.UseStaticFiles();
-
+        app.UseCookiePolicy();// added this, Before UseAuthentication or anything else that writes cookies.
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();

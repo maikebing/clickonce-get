@@ -1,5 +1,5 @@
 ﻿#nullable enable
-using AspNet.Security.OAuth.GitHub;
+using AspNet.Security.OAuth.Gitee;
 using ClickOnceGet.Shared.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,7 +14,7 @@ public class AuthenticationController : Controller
     {
         return this.Challenge(
             new AuthenticationProperties { RedirectUri = returnUri ?? "/" },
-            GitHubAuthenticationDefaults.AuthenticationScheme);
+            GiteeAuthenticationDefaults.AuthenticationScheme);
     }
 
     [HttpPost("/auth/signout")]

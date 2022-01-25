@@ -31,7 +31,7 @@ public class ClientSideAuthenticationStateProvider : AuthenticationStateProvider
         var identity = default(ClaimsIdentity);
         if (!string.IsNullOrEmpty(user?.Name))
         {
-            identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, user.Name) }, authenticationType: "GitHub");
+            identity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, user.Name) }, authenticationType: "Gitee");
         }
         return new AuthenticationState(new ClaimsPrincipal(identity ?? new ClaimsIdentity()));
     }

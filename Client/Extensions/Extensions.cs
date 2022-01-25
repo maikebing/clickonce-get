@@ -10,9 +10,10 @@ public static class Extensions
         if (!response.IsSuccessStatusCode)
         {
             var message = $"Server respond the status code {(int)response.StatusCode}";
+           var   responsemessage=  await response.Content.ReadAsStringAsync();
             if (response.Content.Headers.ContentType.MediaType?.StartsWith("text") == true)
             {
-                message = await response.Content.ReadAsStringAsync();
+                message = responsemessage;
             }
             throw new HttpRequestException(message, null, response.StatusCode);
         }
